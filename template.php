@@ -145,7 +145,7 @@
 			if (!file_exists($____tplfilename)) {
 				$calling_trace = debug_backtrace();
 				$caller = $calling_trace[0]['file'].' line '.$calling_trace[0]['line'];
-				throw new Template_Exception('Template not found: "'.$__tplfilename.'" requested from '.$caller);
+				throw new Template_Exception('Template not found: "'.$____tplfilename.'" requested from '.$caller);
 			}
 
 			// Capture the output if we're buffered
