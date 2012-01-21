@@ -82,7 +82,10 @@
 					case self::TYPE_SIMPLE:
 						if (substr($url, 0, strlen($route[1])) == $route[1]) {
 							$matched = true;
-							$params = $this->parseURL(substr($url, strlen($route[1])));
+							$url = substr($url, strlen($route[1]));
+							if ($url !== false) {
+								$params = $this->parseURL($url);
+							}
 						}
 						break;
 
