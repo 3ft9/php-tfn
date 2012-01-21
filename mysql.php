@@ -478,10 +478,11 @@
 			}
 
 			$retval = mysql_fetch_assoc($query);
-			if (!$retval && mysql_error($this->_conn) != '') {
+			if (!$retval && @mysql_error($this->_conn) != '') {
 				$this->_lasterror = mysql_error($this->_conn);
 				self::throwException(__METHOD__, $this->_lasterror);
 			}
+
 			return $retval;
 		}
 
@@ -584,9 +585,13 @@
 
 			$retval = $this->query($sql);
 
+			if (!$retval) {
+				return false;
+			}
+
 			// Get the auto_increment ID if there is one
 			$retval = $this->insertID();
-			if (!$retval) {
+			if (!is_numeric($retval)) {
 				$retval = true;
 			}
 
@@ -614,7 +619,9 @@
 			}
 
 			$retval = $this->query($sql);
-
+			if (!$retval) {
+				return false;
+			}
 			return $this->affectedRows();
 		}
 
@@ -633,6 +640,10 @@
 			$sql = 'delete from `'.$table.'` where '.$where;
 
 			$query = $this->query($sql);
+
+			if (!$query) {
+				return false;
+			}
 
 			return $this->affectedRows();
 		}
@@ -658,6 +669,10 @@
 			$sql.= ' limit 1';
 
 			$query = $this->query($sql);
+
+			if (!$query) {
+				return false;
+			}
 
 			$retval = $this->fetchRow($query);
 			$this->freeQuery($query);
@@ -806,7 +821,7 @@
 		{
 			$retval = mysql_affected_rows($this->_conn);
 
-			if (!$retval) {
+			if (!is_numeric($retval)) {
 				$this->_lasterror = mysql_error($this->_conn);
 				self::throwException(__METHOD__, $this->_lasterror);
 			}
