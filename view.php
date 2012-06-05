@@ -38,7 +38,7 @@
 		 * @param string $tplroot
 		 * @return View
 		 */
-		protected function __construct($tplroot)
+		public function __construct($tplroot)
 		{
 			parent::__construct($tplroot);
 		}
@@ -52,29 +52,6 @@
 			if ($this->_destruct_with_footer) {
 				$this->renderFooter();
 			}
-		}
-
-		/**
-		 * Magic function to get internal variables that get exposed to templates.
-		 *
-		 * @param string $var
-		 * @return mixed
-		 */
-		public function __get($var)
-		{
-			return parent::__get($var);
-		}
-
-		/**
-		 * Magic function to set internal variables that get exposed to templates.
-		 *
-		 * @param string $var
-		 * @param mixed $val
-		 * @return mixed
-		 */
-		public function __set($var, $val)
-		{
-			return parent::__set($var, $val);
 		}
 
 		/**

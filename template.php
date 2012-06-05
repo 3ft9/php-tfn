@@ -113,6 +113,26 @@
 		}
 
 		/**
+		 * Magic function called by isset/empty on member variables.
+		 *
+		 * @param string $var
+		 */
+		public function __isset($var)
+		{
+			return isset($this->_data[$var]);
+		}
+
+		/**
+		 * Magic function called by unset on member variables.
+		 *
+		 * @param string $var
+		 */
+		public function __unset($var)
+		{
+			unset($this->_data[$var]);
+		}
+
+		/**
 		 * Checks whether a given template exists.
 		 *
 		 * @param string $tpl
@@ -134,6 +154,7 @@
 		 *
 		 * @param string $____tpl The template filename relative to _tplroot.
 		 * @param array $____data An array of variables to be made available to the template.
+		 * @param boolean $____return Pass in true to return the output instead of echoing it.
 		 */
 		public function render($____tpl, $____data = array(), $____return = false)
 		{
