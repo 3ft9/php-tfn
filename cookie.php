@@ -48,9 +48,14 @@
 		* @param string $default
 		* @return mixed
 		*/
-		static public function get($name, $default = '')
+		static public function get($name, $default = '', $key = false)
 		{
-			return (isset($_COOKIE[$name]) ? $_COOKIE[$name] : $default);
+			$retval = (isset($_COOKIE[$name]) ? $_COOKIE[$name] : $default);
+			if (strlen($retval) > 0 && $retval[0] == '!') {
+				// Cookie is encrypted, decrypt it first
+				$retval = self::decrypt(substr($retval, 1), $key);
+			}
+			return $retval;
 		}
 
 		/**
@@ -85,6 +90,11 @@
 				}
 			}
 			return $retval;
+		}
+
+		static public function setEncrypted($name, $value, $expiry = self::OneYear, $path = '/', $domain = false, $key = false)
+		{
+			return self::set($name, '!'.Encryption::encrypt($value, $key), $expiry, $path, $domain);
 		}
 
 		/**
