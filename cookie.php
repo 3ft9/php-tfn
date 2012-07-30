@@ -53,13 +53,14 @@
 			$retval = (isset($_COOKIE[$name]) ? $_COOKIE[$name] : $default);
 			if (strlen($retval) > 0 && $retval[0] == '!') {
 				// Cookie is encrypted, decrypt it first
-				$retval = self::decrypt(substr($retval, 1), $key);
+				$retval = Encryption::decrypt(substr($retval, 1), $key);
 			}
 			return $retval;
 		}
 
 		/**
-		* Set a cookie. Silently does nothing if headers have already been sent.
+		* Set a cookie. Silently does nothing if headers have already been sent
+		* but returns false so you can catch it.
 		*
 		* @param string $name
 		* @param string $value
@@ -73,18 +74,19 @@
 			$retval = false;
 			if (!headers_sent()) {
 				if ($domain === false) {
-					$domain = $_SERVER['HTTP_HOST'];
+					$bits = explode(':', $_SERVER['HTTP_HOST']);
+					$domain = $bits[0];
 				}
 
 				if ($expiry === -1) {
 					$expiry = 1893456000; // Lifetime = 2030-01-01 00:00:00
 				} elseif (is_numeric($expiry)) {
 					$expiry += time();
-				} else {
-					$expiry = strtotime($expiry);
+				} elseif (is_null($expiry)) {
+					$expiry = 0;
 				}
 
-				$retval = @setcookie($name, $value, $expiry, $path, $domain);
+				$retval = setcookie($name, $value, $expiry, $path, $domain);
 				if ($retval) {
 					$_COOKIE[$name] = $value;
 				}

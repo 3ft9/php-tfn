@@ -55,6 +55,27 @@
 		}
 
 		/**
+		 * Magic function that returns a value from the internal data array.
+		 *
+		 * @param mixed $var
+		 * @return mixed
+		 */
+		public function & __get($var)
+		{
+			return parent::__get($var);
+		}
+
+		/**
+		 * Magic function to set a value in the internal data.
+		 *
+		 * @param string $var
+		 * @param mixed $val
+		 */
+		public function __set($var, $val)
+		{
+			parent::__set($var, $val);
+		}
+		/**
 		 * Starts the view output. Sets a variable to tell the destructor to
 		 * output the footer, then outputs the header.
 		 */

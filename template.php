@@ -94,7 +94,7 @@
 		 * @param mixed $var
 		 * @return mixed
 		 */
-		public function __get($var)
+		public function & __get($var)
 		{
 			if (isset($this->_data[$var]))
 				return $this->_data[$var];

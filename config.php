@@ -28,6 +28,11 @@
 		 */
 		static public function init($filename)
 		{
+			// If the filename passed in doesn't contain any path separaters,
+			// assume it's just the filename and prepend /etc/.
+			if (false === strpos($filename, '/') && false === strpos($filename, '\\') && !file_exists($filename)) {
+				$filename = '/etc/'.$filename;
+			}
 			self::$_filename = $filename;
 			self::reload();
 		}
@@ -40,7 +45,7 @@
 		{
 			// Make sure the file exists
 			if (!file_exists(self::$_filename)) {
-				throw new Exception('Configuration file not found: "'.self::$_filename.'"');
+				throw new Exception_ConfigurationError('Configuration file not found: "'.self::$_filename.'"');
 			}
 
 			// Clear the array
@@ -49,7 +54,7 @@
 			// Open the configuration file
 			$fp = fopen(self::$_filename, 'rt');
 			if (!$fp) {
-				throw new Exception('Failed to open configuration file: "'.self::$_filename.'"');
+				throw new Exception_ConfigurationError('Failed to open configuration file: "'.self::$_filename.'"');
 			}
 
 			// Parse the file

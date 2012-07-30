@@ -73,7 +73,7 @@
 		 * @param bool $persistant
 		 * @return DB Or false on failure
 		 */
-		public static function & connection($config)
+		public static function & connection($config = 'default')
 		{
 			// Make sure we know about this configuration
 			if (!isset(self::$_configurations[$config])) {
@@ -422,6 +422,80 @@
 		}
 
 		/**
+         * Create a table.
+         *
+         * @param string $name          The name for the table.
+         * @param array  $fields        The field definitions.
+         * @param mixed  $primarykey    The field name or array of field names
+         *                              that make up the primary key.
+         * @param array  $uniqueindexes Array of unique indexes.
+         * @param array  $indexes       Array of indexes.
+         * @param string $storageengine The storage engine to use (def: InnoDB)
+         * @param string $charset       The default charset (def: utf8)
+         * @return bool
+         */
+		public function createTable(
+			$name, $fields, $primarykey = false,
+			$uniqueindexes = array(), $indexes = array(),
+			$storageengine = 'InnoDB', $charset = 'utf8',
+			$autoincrementstart = false)
+		{
+			$retval = false;
+
+			if ($primarykey !== false and !is_array($primarykey)) {
+				$primarykey = array($primarykey);
+			}
+
+			$sql = 'create table `'.$name.'` (';
+			foreach ($fields as $field => $def) {
+				$sql .= '`'.$field.'` '.$def.', ';
+			}
+			$sql = trim($sql, ' ,');
+			if ($primarykey !== false) {
+				$sql .= ', primary key (`'.implode('`, `', $primarykey).'`)';
+			}
+			foreach ($uniqueindexes as $indexname => $def) {
+				if (!is_array($def)) {
+					$def = array($def);
+				}
+				$sql .= ', unique key `'.$indexname.'` (`'.implode('`, `', $def).'`)';
+			}
+			foreach ($indexes as $indexname => $def) {
+				if (!is_array($def)) {
+					$def = array($def);
+				}
+				$sql .= ', key `'.$indexname.'` (`'.implode('`, `', $def).'`)';
+			}
+			$sql .= ') ENGINE='.$storageengine.' DEFAULT CHARSET='.$charset;
+			if ($autoincrementstart !== false) {
+				$sql.= ' AUTO_INCREMENT = '.$autoincrementstart;
+			}
+
+			return $this->query($sql);
+		}
+
+		/**
+         * Drops the given table.
+         *
+         * @param string $table     The name of the table to drop.
+         * @param bool   $if_exists Set to true to not raise an error if the
+         *                          table does not exist.
+         * @return bool
+         */
+		public function dropTable($table, $if_exists = false)
+		{
+			$retval = false;
+
+			$sql = 'drop table ';
+			if ($if_exists) {
+				$sql .= 'if exists ';
+			}
+			$sql .= '`'.$table.'`';
+
+			return $this->query($sql);
+		}
+
+		/**
 		 * Perform a select query and fetch the results into an array.
 		 *
 		 * @param string $sql The SQL to execute.
@@ -662,6 +736,9 @@
 
 			$sql = 'select ';
 			$sql.= ($fields === false ? '*' : '`'.implode('`, `', $fields).'`');
+			if (is_array($where)) {
+				$where = implode(' and ', $this->buildSet($where));
+			}
 			$sql.= ' from `'.$table.'` where '.$where;
 			if ($order !== false) {
 				$sql.= ' order by '.$order;
@@ -772,7 +849,8 @@
 
 			$query = $this->query($sql);
 
-			$retval = array_shift($this->fetchRow($query));
+			$res = $this->fetchRow($query);
+			$retval = array_shift($res);
 
 			$this->freeQuery($query);
 

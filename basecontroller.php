@@ -29,6 +29,16 @@
 		}
 
 		/**
+		 * Default 404 handler.
+		 *
+		 * @param array $params The parameters from the URL.
+		 */
+		public function notfoundAction($params)
+		{
+			echo '<html><head><title>404 Not Found</title></head><body><h1>404 Not Found</h1></body></html>';
+		}
+
+		/**
 		 * Redirect the browser to a different location.
 		 *
 		 * @param string $url The destination URL - according to the spec this
