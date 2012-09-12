@@ -63,7 +63,7 @@
 				$line = trim(fgets($fp));
 				$linenum++;
 				// Check the line has content and is not a comment
-				if (strlen($line) > 0 and $line[0] != ';') {
+				if (strlen($line) > 0 and $line[0] != ';' and $line[0] != '#') {
 					// Separate the key from the value
 					$parts = explode('=', $line, 2);
 					// Trim both
