@@ -29,13 +29,32 @@
 		}
 
 		/**
-		 * Default 404 handler.
+		 * Default 404 handler. Sends a 404 response
 		 *
 		 * @param array $params The parameters from the URL.
 		 */
 		public function notfoundAction($params)
 		{
-			echo '<html><head><title>404 Not Found</title></head><body><h1>404 Not Found</h1></body></html>';
+			$this->sendResponse('404 Not Found', $params);
+		}
+
+		/**
+		 * Send a response. Should only be used when sending a non-200 status code.
+		 *
+		 * @param string $status The HTTP status line.
+		 * @param string $content Optional body content.
+		 * @param array  $headers Additional headers to send (header => value).
+		 */
+		public function sendResponse($status = '204 No Content', $body = '', $headers = array())
+		{
+			if (!headers_sent()) {
+				header('HTTP/1.0 '.$status);
+				header('Status: '.$status);
+				foreach ($headers as $key => $val) {
+					header($key.': '.$val);
+				}
+			}
+			echo $body;
 		}
 
 		/**
