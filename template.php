@@ -1,9 +1,6 @@
 <?php
 	/**
-	 * 3ft9 Template class.
-	 *
-	 * Part of the 3ft9 PHP Class Library.
-	 * Copyright (C) 3ft9 Ltd. All rights reserved.
+	 * TFN: 3ft9 Ltd PHP Component Library.
 	 */
 	namespace TFN;
 
@@ -43,15 +40,13 @@
 		{
 			$____retval = '';
 
-			$____tplfilename = false;
-
-			if (file_exists($____tplfilename)) {
+			if (file_exists($____filename)) {
 				if ($____return) {
 					ob_start();
 				}
 
 				extract($____data);
-				require($____tplfilename);
+				require($____filename);
 
 				if ($____return) {
 					$____retval = ob_get_contents();
@@ -83,7 +78,17 @@
 		 *
 		 * @param string $tplroot The root template directory.
 		 */
-		protected function __construct($tplroot)
+		public function __construct($tplroot)
+		{
+			$this->setTplRoot($tplroot);
+		}
+
+		/**
+		 * Set the template root.
+		 *
+		 * @param string $tplroot The root template directory.
+		 */
+		public function setTplRoot($tplroot)
 		{
 			$this->_tplroot = str_replace('//', '/', $tplroot.'/');
 		}
@@ -94,7 +99,7 @@
 		 * @param mixed $var
 		 * @return mixed
 		 */
-		public function & __get($var)
+		public function __get($var)
 		{
 			if (isset($this->_data[$var]))
 				return $this->_data[$var];
@@ -164,9 +169,7 @@
 
 			// Make sure the template exists
 			if (!file_exists($____tplfilename)) {
-				$calling_trace = debug_backtrace();
-				$caller = $calling_trace[0]['file'].' line '.$calling_trace[0]['line'];
-				throw new Template_Exception('Template not found: "'.$____tplfilename.'" requested from '.$caller);
+				throw new Template_Exception('Template not found: "'.$____tplfilename.'"');
 			}
 
 			// Capture the output if we're buffered
@@ -207,5 +210,16 @@
 		public function renderAndAppendToVar($var, $tpl, $data = array())
 		{
 			$this->_data[$var] .= $this->render($tpl, $data, true);
+		}
+
+		/**
+		 * Return an HTML-escaped version of the given string.
+		 *
+		 * @param string $str The string to escape.
+		 * @return string     The escaped string.
+		 */
+		public function escapeHTML($str)
+		{
+			return htmlspecialchars($str, ENT_COMPAT, 'UTF-8');
 		}
 	}

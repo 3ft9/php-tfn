@@ -1,9 +1,6 @@
 <?php
 	/**
-	 * Encryption utility class.
-	 *
-	 * Part of the 3ft9 PHP Class Library.
-	 * Copyright (C) 3ft9 Ltd. All rights reserved.
+	 * TFN: 3ft9 Ltd PHP Component Library.
 	 */
 	namespace TFN;
 
@@ -13,9 +10,12 @@
 	 * it's used.
 	 */
 	if (!function_exists('mcrypt_encrypt')) {
-		throw new Exception('The mcrypt extension is required for encrypted cookie support');
+		throw new Exception('The mcrypt extension is required for encryption support');
 	}
 
+	/**
+	 * Encryption utility class.
+	 */
 	class Encryption
 	{
 		/**

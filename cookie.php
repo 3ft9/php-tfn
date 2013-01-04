@@ -1,12 +1,12 @@
 <?php
 	/**
-	 * Cookie Wrapper.
-	 *
-	 * Part of the 3ft9 PHP Class Library.
-	 * Copyright (C) 3ft9 Ltd. All rights reserved.
+	 * TFN: 3ft9 Ltd PHP Component Library.
 	 */
 	namespace TFN;
 
+	/**
+	 * Cookie wrapper.
+	 */
 	class Cookie
 	{
 		const Session = null;
@@ -113,9 +113,10 @@
 			$retval = false;
 			if (!headers_sent()) {
 				if ($domain === false) {
-					$domain = $_SERVER['HTTP_HOST'];
+					$bits = explode(':', $_SERVER['HTTP_HOST']);
+					$domain = $bits[0];
 				}
-				$retval = setcookie($name, '', time() - 3600, $path, $domain);
+				$retval = setcookie($name, 'deleted', time() - 86400, $path, $domain);
 
 				if ($remove_from_global) {
 					unset($_COOKIE[$name]);

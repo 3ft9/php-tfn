@@ -1,9 +1,6 @@
 <?php
 	/**
-	 * 3ft9 Router.
-	 *
-	 * Part of the 3ft9 PHP Class Library.
-	 * Copyright (C) 3ft9 Ltd. All rights reserved.
+	 * TFN: 3ft9 Ltd PHP Component Library.
 	 */
 	namespace TFN;
 
@@ -133,7 +130,7 @@
 						if ($method == 'indexAction' or !method_exists($handler, 'indexAction')) {
 							throw new Router_Exception('Unable to route this request to handler "'.$class.'"');
 						}
-						array_unshift($params, $method);
+						array_unshift($params, substr($method, 0, -6));
 						$method = 'indexAction';
 					}
 
@@ -200,13 +197,23 @@
 		 * @param $name string The name of the router to load.
 		 * @return mixed The router object or false if the load failed.
 		 */
-		public static function load($name)
+		public static function load($name, $build_function = false)
 		{
 			$retval = false;
+
+			// Try to load the cached routes
 			$filename = self::getCacheFilename($name);
 			if (file_exists($filename)) {
 				$retval = unserialize(file_get_contents($filename));
 			}
+
+			// No routes loaded, call the build function if given
+			if (!$retval && $build_function !== false) {
+				$retval = new self();
+				$build_function($retval);
+				$retval->save($name);
+			}
+
 			return $retval;
 		}
 

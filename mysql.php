@@ -1,9 +1,6 @@
 <?php
 	/**
-	 * 3ft9 MySQL class.
-	 *
-	 * Part of the 3ft9 PHP Class Library.
-	 * Copyright (C) 3ft9 Ltd. All rights reserved.
+	 * TFN: 3ft9 Ltd PHP Component Library.
 	 */
 	namespace TFN;
 
@@ -26,7 +23,7 @@
 		 * @param string $message The message to pass with it, defaults to "Failed"
 		 * @throws Exception
 		 */
-		static private function throwException($method, $message = 'Failed') {
+		private static function throwException($method, $message = 'Failed') {
 			throw new MySQL_Exception($method.': '.$message);
 		}
 
@@ -35,7 +32,7 @@
 		 */
 		private static $_configurations = array();
 
-		static public function addConfiguration(
+		public static function addConfiguration(
 			$config,
 			$database,
 			$username = 'root',

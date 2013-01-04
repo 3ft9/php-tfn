@@ -1,52 +1,67 @@
 <?php
 	/**
-	 * 3ft9 Logger.
-	 *
-	 * Part of the 3ft9 PHP Class Library.
-	 * Copyright (C) 3ft9 Ltd. All rights reserved.
+	 * TFN: 3ft9 Ltd PHP Component Library.
 	 */
 	namespace TFN;
 
+	/**
+	 * Define the log levels.
+	 */
+	if (!defined('TFN_ERROR')) {
+		define('TFN_ERROR', 'error');
+	}
+	if (!defined('TFN_WARNING')) {
+		define('TFN_WARNING', 'warning');
+	}
+	if (!defined('TFN_NOTICE')) {
+		define('TFN_NOTICE', 'notice');
+	}
+	if (!defined('TFN_DEBUG')) {
+		define('TFN_DEBUG', 'debug');
+	}
+
+	/**
+	 * Basic stdout logging class.
+	 */
 	class Logger
 	{
 		/**
 		 * The singleton instance.
-		 * @var TFN_Logger
+		 * @var \TFN\Logger
 		 */
-		static private $_instance = null;
+		protected static $_instance = null;
 
 		/**
 		 * The current indent level.
 		 * @var int
 		 */
-		private $_indent = 0;
+		protected $_indent = 0;
 
 		/**
 		 * The timestamp when logging was started.
 		 * @var int
 		 */
-		private $_start = 0;
+		protected $_start = 0;
 
 		/**
 		 * The text to be repeated $indent times before each line.
 		 * @var int
 		 */
-		private $_indent_text = '  ';
+		protected $_indent_text = '  ';
 
 		/**
 		 * Text to be prefixed to each log message.
 		 * @var int
 		 */
-		private $_prefix = '';
+		protected $_prefix = '';
 
 		/**
 		 * Return the singleton instance, creating it if it doesn't exist.
-		 * @return TFN_Logger
+		 * @return \TFN\Logger
 		 */
 		public static function getInstance()
 		{
-			if (is_null(self::$_instance))
-			{
+			if (is_null(self::$_instance)) {
 				self::$_instance = new self();
 			}
 			return self::$_instance;
@@ -55,7 +70,7 @@
 		/**
 		 * Construct a logger object.
 		 */
-		public function __construct()
+		protected function __construct()
 		{
 			$this->_start = microtime(true);
 		}

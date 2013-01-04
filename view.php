@@ -1,9 +1,6 @@
 <?php
 	/**
-	 * 3ft9 View class.
-	 *
-	 * Part of the 3ft9 PHP Class Library.
-	 * Copyright (C) 3ft9 Ltd. All rights reserved.
+	 * TFN: 3ft9 Ltd PHP Component Library.
 	 */
 	namespace TFN;
 
@@ -60,7 +57,7 @@
 		 * @param mixed $var
 		 * @return mixed
 		 */
-		public function & __get($var)
+		public function __get($var)
 		{
 			return parent::__get($var);
 		}
@@ -75,6 +72,33 @@
 		{
 			parent::__set($var, $val);
 		}
+
+		/**
+		 * Add a CSS file to the CSS array.
+		 */
+		public function css($css)
+		{
+			$arr = parent::__get('css');
+			if (is_null($arr)) {
+				$arr = array();
+			}
+			$arr[] = $css;
+			parent::__set('css', $arr);
+		}
+
+		/**
+		 * Add a JS file to the JS array.
+		 */
+		public function js($js)
+		{
+			$arr = parent::__get('js');
+			if (is_null($arr)) {
+				$arr = array();
+			}
+			$arr[] = $js;
+			parent::__set('js', $arr);
+		}
+
 		/**
 		 * Starts the view output. Sets a variable to tell the destructor to
 		 * output the footer, then outputs the header.
@@ -129,6 +153,32 @@
 					header('Cache-Control: PUBLIC, max-age='.$age.', must-revalidate');
 					header('Expires: '.gmdate('r', time() + $age).' GMT');
 				}
+			} else {
+				// Headers already sent!
 			}
+		}
+
+		/**
+		 * Return an HTML-escaped version of the given string.
+		 *
+		 * @param string $str The string to escape.
+		 * @return string     The escaped string.
+		 */
+		public function escape($str)
+		{
+			return $this->escapeHTML($str);
+		}
+
+		/**
+		 * Render a generic message. This method assumes there is a template called
+		 * message.tpl.php in the template root.
+		 */
+		public function message($title, $message)
+		{
+			if (empty($this->body_id)) {
+				$this->body_id = 'msg';
+			}
+			$this->start();
+			$this->render('message.tpl.php', array('title' => $title, 'message' => $message));
 		}
 	}

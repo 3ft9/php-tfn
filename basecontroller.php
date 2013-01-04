@@ -1,9 +1,6 @@
 <?php
 	/**
-	 * 3ft9 BaseController.
-	 *
-	 * Part of the 3ft9 PHP Class Library.
-	 * Copyright (C) 3ft9 Ltd. All rights reserved.
+	 * TFN: 3ft9 Ltd PHP Component Library.
 	 */
 	namespace TFN;
 
@@ -11,7 +8,6 @@
 	 * This class is a basic set of functionality for a controller class.
 	 * TODO: Usage documentation!
 	 */
-	BaseController::setTemplateRoot(__DIR__.'/../../tpl/');
 	class BaseController
 	{
 		protected static $_template_root = '';
@@ -21,11 +17,48 @@
 			self::$_template_root = $tplroot;
 		}
 
-		protected $_view = null;
+		/**
+		 * Redirect the browser to a different location.
+		 *
+		 * @param string $url The destination URL - according to the spec this
+		 *                    should be absolute not relative.
+		 * @param bool $exit Set to false to return to the caller rather than
+		 *                   ending execution.
+		 */
+		public static function _redirect($url, $exit = true, $permanent = false)
+		{
+			if ((substr($url, 0, 7) != 'http://' || substr($url, 0, 8) != 'https://') and $url[0] == '/') {
+				$url = 'http://'.$_SERVER['HTTP_HOST'].$url;
+			}
+
+			if (headers_sent()) {
+				echo '<script type="text/javascript"><!--'.PHP_EOL.'location.href = \''.$url.'\';'.PHP_EOL.'--></script>'.PHP_EOL;
+			} else {
+				// Output the redirect header
+				header('Location: '.$url, true, ($permanent ? 301 : 302));
+			}
+
+			// If told to exit, output the moved message and do so
+			if ($exit) {
+				// Empty and clean up any pending output buffers
+				while (@ob_end_clean());
+
+				print '<h1>Document Moved</h1>';
+				print '<p>The requested document has moved <a href="'.$url.'">here</a>.</p>';
+				print '<script type="text/javascript"> location.href = "'.$url.'"; </script>';
+				exit;
+			}
+		}
+
+		protected $view = null;
+
+		protected $request = null;
 
 		public function __construct()
 		{
-			$this->_view = View::create(self::$_template_root);
+			$this->request = Request::init();
+			$this->view = View::create(self::$_template_root);
+			$this->view->request = $this->request;
 		}
 
 		/**
@@ -33,9 +66,9 @@
 		 *
 		 * @param array $params The parameters from the URL.
 		 */
-		public function notfoundAction($params)
+		public function notfoundAction($params = array())
 		{
-			$this->sendResponse('404 Not Found', $params);
+			$this->sendResponse('404 Not Found', is_array($params) ? 'Not found' : $params);
 		}
 
 		/**
@@ -67,27 +100,7 @@
 		 */
 		public function redirect($url, $exit = true, $permanent = false)
 		{
-			if ((substr($url, 0, 7) != 'http://' || substr($url, 0, 8) != 'https://') and $url[0] == '/') {
-				$url = 'http://'.$_SERVER['HTTP_HOST'].$url;
-			}
-
-			if (headers_sent()) {
-				echo '<script type="text/javascript"><!--'.PHP_EOL.'location.href = \''.$url.'\';'.PHP_EOL.'--></script>'.PHP_EOL;
-			} else {
-				// Output the redirect header
-				header('Location: '.$url, true, ($permanent ? 301 : 302));
-			}
-
-			// If told to exit, output the moved message and do so
-			if ($exit) {
-				// Empty and clean up any pending output buffers
-				while (@ob_end_clean());
-
-				print '<h1>Document Moved</h1>';
-				print '<p>The requested document has moved <a href="'.$url.'">here</a>.</p>';
-				print '<script type="text/javascript"> location.href = "'.$url.'"; </script>';
-				exit;
-			}
+			self::_redirect($url, $exit, $permanent);
 		}
 
 		/**
@@ -134,5 +147,22 @@
 
 			// Return the modified URL
 			return $url.(empty($parsed_params) ? '' : '?'.http_build_query($parsed_params));
+		}
+
+		/**
+		 * Get the raw body of the request.
+		 *
+		 * @param string $override_body Specify this to use this as the body (for unit test purposes).
+		 * @return string The raw body.
+		 */
+		public function getRequestBody($override_body = false)
+		{
+			static $body = false;
+			if ($override_body !== false) {
+				$body = $override_body;
+			} elseif ($body === false) {
+				$body = file_get_contents('php://input');
+			}
+			return $body;
 		}
 	}
