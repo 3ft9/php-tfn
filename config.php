@@ -7,7 +7,7 @@
 	/**
 	 * The Config class will throw this exception when it encounters an error.
 	 */
-	class Exception_ConfigurationError extends \Exception { }
+	class Exception_ConfigurationError extends TFNException { }
 
 	/**
 	 * The static Config class provides access to a configuration file in the

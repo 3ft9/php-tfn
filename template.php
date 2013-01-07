@@ -8,7 +8,7 @@
 	 * The Template class will throw this custom exception when something goes
 	 * wrong.
 	 */
-	class Template_Exception extends \Exception { }
+	class Template_Exception extends TFNException { }
 
 	/**
 	 * This class provides a very simple PHP-based templating system.

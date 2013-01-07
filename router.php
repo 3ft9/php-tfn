@@ -8,7 +8,7 @@
 	 * The Router class will throw this custom exception when something goes
 	 * wrong.
 	 */
-	class Router_Exception extends \Exception { }
+	class Router_Exception extends TFNException { }
 
 	/**
 	 * This class wraps a very simple routing mechanism.

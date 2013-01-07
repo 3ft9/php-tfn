@@ -8,7 +8,7 @@
 	 * The MySQL class will throw this custom exception when something goes
 	 * wrong.
 	 */
-	class MySQL_Exception extends \Exception { }
+	class MySQL_Exception extends TFNException { }
 
 	/**
 	 * This class wraps access to one or more MySQL databases.

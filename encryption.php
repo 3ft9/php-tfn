@@ -10,7 +10,7 @@
 	 * it's used.
 	 */
 	if (!function_exists('mcrypt_encrypt')) {
-		throw new Exception('The mcrypt extension is required for encryption support');
+		throw new TFNException('The mcrypt extension is required for encryption support');
 	}
 
 	/**

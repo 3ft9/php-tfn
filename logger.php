@@ -5,22 +5,6 @@
 	namespace TFN;
 
 	/**
-	 * Define the log levels.
-	 */
-	if (!defined('TFN_ERROR')) {
-		define('TFN_ERROR', 'error');
-	}
-	if (!defined('TFN_WARNING')) {
-		define('TFN_WARNING', 'warning');
-	}
-	if (!defined('TFN_NOTICE')) {
-		define('TFN_NOTICE', 'notice');
-	}
-	if (!defined('TFN_DEBUG')) {
-		define('TFN_DEBUG', 'debug');
-	}
-
-	/**
 	 * Basic stdout logging class.
 	 */
 	class Logger
