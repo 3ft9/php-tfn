@@ -114,45 +114,14 @@
 		 */
 		public function modifyURL($url = false, $addvars = array(), $removevars = array(), $preservedvars = array())
 		{
-			if ($url === false) {
-				$url = $_SERVER['REQUEST_URI'];
-			}
-
-			// Are we making any changes?
-			if (count($addvars) == 0 and count($removevars) == 0) {
-				return $url;
-			}
-
-			// Do we have an existing query string?
-			if (strpos($url, '?') === false) {
-				// Nope, so just add the ones that need adding
-				$parsed_params = $addvars;
-			} else {
-				// Grab the current vars
-				list($url, $params) = explode('?', $url, 2);
-				parse_str($params, $parsed_params);
-				// Remove those that need to be removed
-				foreach ($removevars as $key) {
-					if (!in_array($key, $preservedvars)) {
-						unset($parsed_params[$key]);
-					}
-				}
-				// Add those that need to be added
-				foreach ($addvars as $key => $val) {
-					if (!in_array($key, $preservedvars)) {
-						$parsed_params[$key] = $val;
-					}
-				}
-			}
-
-			// Return the modified URL
-			return $url.(empty($parsed_params) ? '' : '?'.http_build_query($parsed_params));
+			return Utils::modifyURL($url, $addvars, $removevars, $preservedvars);
 		}
 
 		/**
 		 * Get the raw body of the request.
 		 *
-		 * @param string $override_body Specify this to use this as the body (for unit test purposes).
+		 * @param string $override_body Specify this to use this as the body (for
+		 *                              unit test purposes).
 		 * @return string The raw body.
 		 */
 		public function getRequestBody($override_body = false)
@@ -161,8 +130,67 @@
 			if ($override_body !== false) {
 				$body = $override_body;
 			} elseif ($body === false) {
-				$body = file_get_contents('php://input');
+				$body = trim(file_get_contents('php://input'));
 			}
 			return $body;
+		}
+
+		/**
+		 * Decode the request body as JSON and return it.
+		 *
+		 * @param mixed $override_body Specify this to use this as the body (for
+		 *                             unit text purposes). Can either be a JSON
+		 *                             string or an array.
+		 * @return array THe decoded body, or false on error.
+		 */
+		public function getJsonRequestBody($override_body = false)
+		{
+			if (is_array($override_body)) {
+				$override_body = json_encode($override_body);
+			}
+			$body = $this->getRequestBody($override_body);
+			if (strlen($body) == 0) {
+				$body = array();
+			} else {
+				$body = json_decode($body, true);
+			}
+			return $body;
+		}
+
+		protected function getCurrentMethod() {
+			return strtolower($this->request->serverVar('REQUEST_METHOD'));
+		}
+
+		protected function isMethod($method) {
+			return (strtolower($method) == $this->getCurrentMethod());
+		}
+
+		/**
+		 * Check the request method matches one of those passed in.
+		 *
+		 * @param array $methods    Array of acceptable methods. Can also be a
+		 *                          string.
+		 * @param bool  $send_error Set to false to prevent an error response if
+		 *                          the method is incorrect.
+		 * @return bool
+		 */
+		protected function checkMethod($methods, $send_error = true)
+		{
+			if (!is_array($methods)) {
+				$methods = array($methods);
+			}
+
+			foreach (array_keys($methods) as $key) {
+				$methods[$key] = strtolower($methods[$key]);
+			}
+
+			if (!in_array($this->getCurrentMethod(), $methods)) {
+				if ($send_error) {
+					$this->returnError('405 Method Not Allowed', 'Method not allowed');
+				}
+				return false;
+			}
+
+			return true;
 		}
 	}
