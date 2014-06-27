@@ -179,52 +179,12 @@
 		}
 
 		/**
-		 * Return the filename to be used for the cache file.
-		 * @param $name string The name of the router.
-		 * @return string The temporary filename.
-		 */
-		public static function getCacheFilename($name)
-		{
-			return
-				sys_get_temp_dir().
-				'/tfn_router_'.
-				preg_replace('/\W/', '', $name).
-				'.dat';
-		}
-
-		/**
-		 * Load a serialized router object.
+		 * Create a new router object.
 		 * @param $name string The name of the router to load.
 		 * @return mixed The router object or false if the load failed.
 		 */
-		public static function load($name, $build_function = false)
+		public static function create($routes)
 		{
-			$retval = false;
-
-			// Try to load the cached routes
-			$filename = self::getCacheFilename($name);
-			if (file_exists($filename)) {
-				$retval = unserialize(file_get_contents($filename));
-			}
-
-			// No routes loaded, call the build function if given
-			if (!$retval && $build_function !== false) {
-				$retval = new self();
-				$build_function($retval);
-				$retval->save($name);
-			}
-
-			return $retval;
-		}
-
-		/**
-		 * Store this object in a temporary file.
-		 * @param $name string The name under which to save this router.
-		 * @return boolean Whether the object was successfully saved.
-		 */
-		public function save($name)
-		{
-			$filename = self::getCacheFilename($name);
-			return file_put_contents($filename, serialize($this));
+			return new self($routes);
 		}
 	}
