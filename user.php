@@ -126,28 +126,28 @@
 		 * This member variable contains all the data associated with this user.
 		 * @var array
 		 */
-		private $_data = array();
+		protected $_data = array();
 
 		/**
 		 * Boolean indicating whether the user is fully authenticated.
 		 *
 		 * @var bool
 		 */
-		private $_authenticated = false;
+		protected $_authenticated = false;
 
 		/**
 		 * Boolean indicating whether the user data is dirty.
 		 *
 		 * @var bool
 		 */
-		private $_dirty = false;
+		protected $_dirty = false;
 
 		/**
 		 * Create a user object for the given ID.
 		 *
 		 * @param string $id The ID of the user to be loaded.
 		 */
-		private function __construct($id)
+		protected function __construct($id)
 		{
 			$this->reloadData($id);
 			$this->_authenticated = false;
@@ -407,7 +407,8 @@
 		{
 			try {
 				$processed_data = $this->processUpdateData($data);
-				Storage::get(self::STORAGE_TABLE, $this->id, $data);
+				Storage::update(self::STORAGE_TABLE, $this->id, $data);
+				$this->reloadData();
 				return true;
 			} catch (StorageException $e) {
 				switch ($e->getCode()) {

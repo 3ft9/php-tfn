@@ -53,7 +53,7 @@
 			return self::$_object->get($table, $query, $fields);
 		}
 
-		static public function query($table, array $query, array $fields = array(), $sort = false, $limit = false, $skip = false)
+		static public function query($table, array $query = array(), array $fields = array(), $sort = false, $limit = false, $skip = false)
 		{
 			if (!self::$_object) {
 				throw new StorageException('Not yet initialised!');

@@ -89,7 +89,7 @@
 			return array();
 		}
 
-		public function query($table, array $query, $fields = false, $sort = false, $limit = false, $skip = false)
+		public function query($table, array $query = array(), array $fields = array(), $sort = false, $limit = false, $skip = false)
 		{
 			if ($fields) {
 				$fields = '`'.implode('`, `', $fields).'`';
@@ -98,7 +98,10 @@
 			}
 
 			try {
-				$sql = 'select '.$fields.' from `'.$table.'` where '.$this->_buildWhere($query, 'and');
+				$sql = 'select '.$fields.' from `'.$table.'`';
+				if ($query) {
+					$sql .= ' where '.$this->_buildWhere($query, 'and');
+				}
 				if ($sort) {
 					$sortorder = array();
 					foreach ($sort as $field => $direction) {
