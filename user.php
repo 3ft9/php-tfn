@@ -116,7 +116,7 @@
 				$additional_data['username'] = $username;
 				$additional_data['password'] = sha1($password);
 				// Create the user in the storage system.
-				return Storage::create(self::STORAGE_TABLE, $additional_data);
+				return Storage::insert(self::STORAGE_TABLE, $additional_data);
 			} catch (StorageException $e) {
 				throw new UserException('Failed to create user: '.$e->getMessage());
 			}
@@ -231,12 +231,6 @@
 		 */
 		public function logMeIn($authenticated = true, $rememberme = false)
 		{
-			// Check that the logged in account is allowed to be logged in
-			if ($this->status != self::STATUS_ACTIVE) {
-				self::logout();
-				return false;
-			}
-
 			self::$_loggedin = $this;
 
 			Cookie::set(
