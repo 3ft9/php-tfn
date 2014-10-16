@@ -66,7 +66,7 @@
 			if (!self::$_object) {
 				throw new StorageException('Not yet initialised!');
 			}
-			return self::$_object->insert($table, $data, $wait);
+			return self::$_object->insert($table, $data);
 		}
 
 		static public function remove($table, array $query)
