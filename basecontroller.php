@@ -184,13 +184,14 @@
 				$methods[$key] = strtolower($methods[$key]);
 			}
 
-			if (!in_array($this->getCurrentMethod(), $methods)) {
+			$currentmethod = $this->getCurrentMethod();
+			if (!in_array($currentmethod, $methods)) {
 				if ($send_error) {
 					$this->returnError('405 Method Not Allowed', 'Method not allowed');
 				}
 				return false;
 			}
 
-			return true;
+			return $currentmethod;
 		}
 	}
