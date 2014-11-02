@@ -66,7 +66,7 @@
 		public function count($table, array $query = array())
 		{
 			try {
-				return intval($this->_conn->query('select count(1) from `'.$table.'` where '.$this->_buildWhere($query, 'and'), \PDO::FETCH_COLUMN, 0)->fetch());
+				return intval($this->_conn->query('select count(1) from `'.$table.'`'.($query ? ' where '.$this->_buildWhere($query, 'and') : ''), \PDO::FETCH_COLUMN, 0)->fetch());
 			} catch (\PDOException $e) {
 				throw new StorageException('Failed to connect: '.$e->getMessage());
 			}
