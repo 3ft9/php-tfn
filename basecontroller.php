@@ -187,7 +187,7 @@
 			$currentmethod = $this->getCurrentMethod();
 			if (!in_array($currentmethod, $methods)) {
 				if ($send_error) {
-					$this->returnError('405 Method Not Allowed', 'Method not allowed');
+					$this->sendResponse('405 Method Not Allowed', '<html><head><title>Method not allowed</title></head><body><h1>Method not allowed</body></html>');
 				}
 				return false;
 			}
