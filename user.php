@@ -70,6 +70,21 @@
 		private static $_loggedin = null;
 
 		/**
+		 * Password seasoning.
+		 */
+		private static $_password_salt = '';
+		private static $_password_pepper = '';
+
+		/**
+		 * Set the password seasoning.
+		 */
+		public static function setSeasoning($salt, $pepper = '')
+		{
+			self::$_password_salt = $salt;
+			self::$_password_pepper = $pepper;
+		}
+
+		/**
 		 * Get a user object by ID.
 		 *
 		 * @param  int $id The user ID.
@@ -78,6 +93,16 @@
 		public static function get($id)
 		{
 			return new self($id);
+		}
+
+		public static function getAll()
+		{
+			$rows = Storage::query(self::STORAGE_TABLE, array(), array('id'), array('username' => 'asc'));
+			$retval = array();
+			foreach ($rows as $row) {
+				$retval[] = new self($row['id']);
+			}
+			return $retval;
 		}
 
 		/**
@@ -114,7 +139,7 @@
 			try {
 				// Add the username and password to the user data.
 				$additional_data['username'] = $username;
-				$additional_data['password'] = sha1($password);
+				$additional_data['password'] = self::seasonPassword($password);
 				// Create the user in the storage system.
 				return Storage::insert(self::STORAGE_TABLE, $additional_data);
 			} catch (StorageException $e) {
@@ -280,7 +305,7 @@
 		{
 			// Get the user data from the storage system.
 			try {
-				$data = Storage::get(self::STORAGE_TABLE, array('username' => $username, 'password' => sha1($password)), array('id'));
+				$data = Storage::get(self::STORAGE_TABLE, array('username' => $username, 'password' => self::seasonPassword($password)), array('id'));
 				if (!$data) {
 					throw new UserNotFoundException();
 				}
@@ -401,7 +426,7 @@
 		{
 			try {
 				$processed_data = $this->processUpdateData($data);
-				Storage::update(self::STORAGE_TABLE, $this->id, $data);
+				Storage::update(self::STORAGE_TABLE, array('id' => $this->id), $data);
 				$this->reloadData();
 				return true;
 			} catch (StorageException $e) {
@@ -439,6 +464,17 @@
 		}
 
 		/**
+		 * Season a password with the salt and pepper.
+		 *
+		 * @param string $password The password.
+		 * @return string          The seasoned password.
+		 */
+		static protected function seasonPassword($password)
+		{
+			return sha1(self::$_password_salt.$password.self::$_password_pepper);
+		}
+
+		/**
 		 * Set the user's password.
 		 *
 		 * @param string $password The new password.
@@ -447,7 +483,7 @@
 		 */
 		public function setPassword($password)
 		{
-			return $this->update(array('password' => $password, 'resetpassword_token' => null));
+			return $this->update(array('password' => self::seasonPassword($password), 'resetpassword_token' => null));
 		}
 
 		/**
