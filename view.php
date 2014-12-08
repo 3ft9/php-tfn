@@ -19,6 +19,13 @@
 		protected $_destruct_with_footer = false;
 
 		/**
+		 * The root for all static file references. Must end with a /.
+		 *
+		 * @var string
+		 */
+		protected $_static_root = '/';
+
+		/**
 		 * Factory function to create an instance of the View class.
 		 *
 		 * @param string $tplroot
@@ -74,29 +81,12 @@
 		}
 
 		/**
-		 * Add a CSS file to the CSS array.
+		 * Return the full URL to the given static file, prefixing the configured
+		 * root.
 		 */
-		public function css($css)
+		public function staticURL($url)
 		{
-			$arr = parent::__get('css');
-			if (is_null($arr)) {
-				$arr = array();
-			}
-			$arr[] = $css;
-			parent::__set('css', $arr);
-		}
-
-		/**
-		 * Add a JS file to the JS array.
-		 */
-		public function js($js)
-		{
-			$arr = parent::__get('js');
-			if (is_null($arr)) {
-				$arr = array();
-			}
-			$arr[] = $js;
-			parent::__set('js', $arr);
+			return rtrim($this->_static_root, '/').'/'.ltrim($url, '/');
 		}
 
 		/**
