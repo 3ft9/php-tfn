@@ -431,9 +431,6 @@
 				return true;
 			} catch (StorageException $e) {
 				switch ($e->getCode()) {
-					case StorageException::NOT_FOUND:
-						throw new UserNotFoundException();
-
 					default:
 						throw new UserException($e->getMessage());
 				}
@@ -483,7 +480,7 @@
 		 */
 		public function setPassword($password)
 		{
-			return $this->update(array('password' => self::seasonPassword($password), 'resetpassword_token' => null));
+			return $this->update(array('password' => self::seasonPassword($password)));
 		}
 
 		/**
