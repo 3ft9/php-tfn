@@ -45,6 +45,18 @@
 		}
 
 		/**
+		 * Escape the supplied value for use in a SQL query. This method should
+		 * add quotes as required.
+		 *
+		 * @param  string  $val The value to be escaped.
+		 * @return string       The escaped value.
+		 */
+		public function escape($val)
+		{
+			return $this->_conn->quote($val);
+		}
+
+		/**
 		 * Returns true if there are any rows matching the filter provided.
 		 *
 		 * @param  string  $table The name of the table.
@@ -155,11 +167,15 @@
 
 		protected function _buildWhere($query, $separator = ',')
 		{
-			$parts = array();
-			foreach ($query as $var => $val) {
-				$parts[] = '`'.$var.'` = '.$this->_conn->quote($val);
+			if (is_array($query)) {
+				$parts = array();
+				foreach ($query as $var => $val) {
+					$parts[] = '`'.$var.'` = '.$this->_conn->quote($val);
+				}
+				return implode(' '.$separator.' ', $parts);
+			} else {
+				return $query;
 			}
-			return implode(' '.$separator.' ', $parts);
 		}
 
 		protected function _getErrorString()

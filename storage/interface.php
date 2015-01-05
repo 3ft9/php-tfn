@@ -7,6 +7,7 @@
 	interface Storage_Interface
 	{
 		public function __construct(array $config);
+		public function escape($val);
 		public function exists($table, array $query);
 		public function count($table, array $query = array());
 		public function get($table, array $query, $fields = false);

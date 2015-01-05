@@ -143,7 +143,7 @@
 				// Create the user in the storage system.
 				return Storage::insert(self::STORAGE_TABLE, $additional_data);
 			} catch (StorageException $e) {
-				throw new UserException('Failed to create user: '.$e->getMessage());
+				throw new UserException($e->getMessage());
 			}
 		}
 

@@ -49,8 +49,7 @@
 				require($____filename);
 
 				if ($____return) {
-					$____retval = ob_get_contents();
-					ob_end_clean();
+					$____retval = ob_get_clean();
 				}
 			} else {
 				throw new Template_Exception('Template not found: '.$____filename);
@@ -181,8 +180,7 @@
 			require $____tplfilename;
 
 			if ($____return) {
-				$____retval = ob_get_contents();
-				ob_end_clean();
+				$____retval = ob_get_clean();
 			}
 
 			return $____retval;

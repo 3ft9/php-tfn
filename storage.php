@@ -29,6 +29,14 @@
 			self::$_object = new $class($config);
 		}
 
+		static public function escape($val)
+		{
+			if (!self::$_object) {
+				throw new StorageException('Not yet initialised!');
+			}
+			return self::$_object->escape($val);
+		}
+
 		static public function exists($table, array $query)
 		{
 			if (!self::$_object) {
