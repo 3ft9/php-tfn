@@ -61,7 +61,7 @@
 			return self::$_object->get($table, $query, $fields);
 		}
 
-		static public function query($table, array $query = array(), array $fields = array(), $sort = false, $limit = false, $skip = false)
+		static public function query($table, $query = array(), array $fields = array(), $sort = false, $limit = false, $skip = false)
 		{
 			if (!self::$_object) {
 				throw new StorageException('Not yet initialised!');
@@ -85,7 +85,7 @@
 			return self::$_object->remove($table, $query);
 		}
 
-		static public function update($table, array $where, array $data, $create_if_missing = false)
+		static public function update($table, $where, array $data, $create_if_missing = false)
 		{
 			if (!self::$_object) {
 				throw new StorageException('Not yet initialised!');

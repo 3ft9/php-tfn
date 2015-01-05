@@ -101,7 +101,7 @@
 			return array();
 		}
 
-		public function query($table, array $query = array(), array $fields = array(), $sort = false, $limit = false, $skip = false)
+		public function query($table, $query = array(), array $fields = array(), $sort = false, $limit = false, $skip = false)
 		{
 			if ($fields) {
 				$fields = '`'.implode('`, `', $fields).'`';
@@ -153,7 +153,7 @@
 			}
 		}
 
-		public function update($table, array $where, array $data, $create_if_missing = false)
+		public function update($table, $where, array $data, $create_if_missing = false)
 		{
 			$retval = false;
 
