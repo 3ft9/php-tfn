@@ -170,7 +170,7 @@
 			if (is_array($query)) {
 				$parts = array();
 				foreach ($query as $var => $val) {
-					$parts[] = '`'.$var.'` = '.$this->_conn->quote($val);
+					$parts[] = '`'.$var.'` = '.(is_array($val) ? $val[0] : $this->_conn->quote($val));
 				}
 				return implode(' '.$separator.' ', $parts);
 			} else {
