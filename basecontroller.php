@@ -17,6 +17,11 @@
 			self::$_template_root = $tplroot;
 		}
 
+		public static function getTemplateRoot()
+		{
+			return self::$_template_root;
+		}
+
 		/**
 		 * Redirect the browser to a different location.
 		 *
