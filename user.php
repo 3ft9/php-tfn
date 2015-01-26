@@ -425,8 +425,7 @@
 		public function update($data)
 		{
 			try {
-				$processed_data = $this->processUpdateData($data);
-				Storage::update(self::STORAGE_TABLE, array('id' => $this->id), $data);
+				Storage::update(self::STORAGE_TABLE, array('id' => $this->id), $this->processUpdateData($data));
 				$this->reloadData();
 				return true;
 			} catch (StorageException $e) {
