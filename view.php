@@ -149,6 +149,15 @@
 		}
 
 		/**
+		 * Convert \r\n\r\n and \n\n to </p><p>, then do nl2br, and return wrapped
+		 * in <p> tags.
+		 */
+		public function pnl2pbr($str)
+		{
+			return '<p>'.nl2br(str_replace("\n\n", '</p><p>', str_replace("\r\n\r\n", '</p><p>', $str))).'</p>';
+		}
+
+		/**
 		 * Return an HTML-escaped version of the given string.
 		 *
 		 * @param string $str The string to escape.
