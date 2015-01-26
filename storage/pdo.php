@@ -126,6 +126,15 @@
 					$skip = intval($skip);
 					$sql .= ' limit '.$skip.', '.$limit;
 				}
+				return $this->querySQL($sql);
+			} catch (\PDOException $e) {
+				throw new StorageException('Query failed: '.$e->getMessage());
+			}
+		}
+
+		public function querySQL($sql)
+		{
+			try {
 				return $this->_conn->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
 			} catch (\PDOException $e) {
 				throw new StorageException('Query failed: '.$e->getMessage());
