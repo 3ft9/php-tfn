@@ -70,7 +70,7 @@
 			}
 
 			try {
-				Storage::update(self::TABLE, $var, array('val' => $val), true);
+				Storage::update(self::TABLE, array('var' => $var), array('val' => $val), true);
 			} catch (StorageException $e) {
 				throw new MetaException($e->getMessage());
 			}
