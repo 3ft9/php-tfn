@@ -141,6 +141,15 @@
 			}
 		}
 
+		public function executeSQL($sql)
+		{
+			try {
+				return $this->_conn->exec($sql);
+			} catch (\PDOException $e) {
+				throw new StorageException('Query failed: '.$e->getMessage());
+			}
+		}
+
 		public function insert($table, array $data)
 		{
 			try {

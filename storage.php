@@ -77,6 +77,14 @@
 			return self::$_object->querySQL($sql);
 		}
 
+		static public function executeSQL($sql)
+		{
+			if (!self::$_object) {
+				throw new StorageException('Not yet initialised!');
+			}
+			return self::$_object->executeSQL($sql);
+		}
+
 		static public function insert($table, array $data)
 		{
 			if (!self::$_object) {
