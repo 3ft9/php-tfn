@@ -61,7 +61,7 @@
 		 * We use this key to encrypt things. DO NOT CHANGE THIS OR EVERYONE WILL
 		 * BE LOGGED OUT!
 		 */
-		const LoginTokenKey = 'sdiovhubysiolosehgiuakelfihsale';
+		const LoginTokenKey = 'sdiovhubysiolo;sehgiuakelfihsale';
 
 		/**
 		 * The currently logged in user object.
