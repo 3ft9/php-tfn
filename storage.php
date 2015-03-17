@@ -29,12 +29,12 @@
 			self::$_object = new $class($config);
 		}
 
-		static public function escape($val)
+		static public function escape($val, $add_quotes = true)
 		{
 			if (!self::$_object) {
 				throw new StorageException('Not yet initialised!');
 			}
-			return self::$_object->escape($val);
+			return self::$_object->escape($val, $add_quotes);
 		}
 
 		static public function exists($table, array $query)

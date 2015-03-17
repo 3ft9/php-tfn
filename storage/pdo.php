@@ -51,9 +51,12 @@
 		 * @param  string  $val The value to be escaped.
 		 * @return string       The escaped value.
 		 */
-		public function escape($val)
+		public function escape($val, $add_quotes = true)
 		{
-			return $this->_conn->quote($val);
+			if ($add_quotes) {
+				return $this->_conn->quote($val);
+			}
+			return substr($this->_conn->quote($val), 1, -1);
 		}
 
 		/**
