@@ -28,6 +28,18 @@
 		}
 
 		/**
+		 * Return an HTML-escaped version of the given string.
+		 * Static version of ::escapeHTML.
+		 *
+		 * @param string $str The string to escape.
+		 * @return string     The escaped string.
+		 */
+		static public function _escapeHTML($str)
+		{
+			return htmlspecialchars($str, ENT_COMPAT, 'UTF-8');
+		}
+
+		/**
 		 * Run a template
 		 *
 		 * @param string $____filename Absolute template filename.
