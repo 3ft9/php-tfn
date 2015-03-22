@@ -7,7 +7,9 @@
 	/**
 	 * All expections thrown by the Storage class will be of this type.
 	 */
-	class StorageException extends TFNException { }
+	class StorageException extends TFNException {
+		const NOT_FOUND = 'not-found';
+	}
 
 	/**
 	 * The storage class. This class implements the storage interface, but passes
