@@ -14,7 +14,7 @@
 		public function query($table, $query = array(), array $fields = array(), $sort = false, $limit = false, $skip = false);
 		public function querySQL($sql);
 		public function executeSQL($sql);
-		public function insert($table, array $data);
+		public function insert($table, array $data, $update_on_duplicate = false);
 		public function remove($table, array $query);
-		public function update($table, $where, array $data, $create_if_missing = false);
+		public function update($table, $where, array $data);
 	}

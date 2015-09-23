@@ -33,10 +33,10 @@
 				$retval = Storage::get(self::TABLE, array('var' => $var), array('val'));
 				if (isset($retval['val'])) {
 					if (strlen($retval['val']) > 2) {
-						if ($retval['val'][0] == '§') {
+						if ($retval['val'][0] == '$') {
 							// Strip the § character that was added when the value was stored.
 							$retval['val'] = substr($retval['val'], 1);
-							if ($retval['val'][0] != '§') {
+							if ($retval['val'][0] != '$') {
 								// Value doesn't start with a § so it's JSON. Decode it.
 								$retval['val'] = json_decode($retval['val'], true);
 							}
@@ -62,15 +62,30 @@
 		{
 			// Convert arrays to JSON, inserting a character to indicate it's JSON.
 			if (is_array($val)) {
-				$val = '§'.json_encode($val);
-			} elseif (is_string($val) && strlen($val) > 0 && $val[0] == '§') {
+				$val = '$'.json_encode($val);
+			} elseif (is_string($val) && strlen($val) > 0 && $val[0] == '$') {
 				// Not an array but it's a string that starts with a § so we need to
 				// escape it.
-				$val = '§'.$val;
+				$val = '$'.$val;
 			}
 
 			try {
-				Storage::update(self::TABLE, array('var' => $var), array('val' => $val), true);
+				Storage::insert(self::TABLE, array('var' => $var, 'val' => $val), true);
+			} catch (StorageException $e) {
+				throw new MetaException($e->getMessage());
+			}
+		}
+
+		/**
+		 * Remove an item from the key/value store.
+		 *
+		 * @param  string        $var The name of the variable.
+		 * @throws MetaException      If something goes wrong.
+		 */
+		static public function remove($var)
+		{
+			try {
+				Storage::remove(self::TABLE, array('var' => $var));
 			} catch (StorageException $e) {
 				throw new MetaException($e->getMessage());
 			}

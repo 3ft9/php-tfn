@@ -87,12 +87,12 @@
 			return self::$_object->executeSQL($sql);
 		}
 
-		static public function insert($table, array $data)
+		static public function insert($table, array $data, $update_on_duplicate = false)
 		{
 			if (!self::$_object) {
 				throw new StorageException('Not yet initialised!');
 			}
-			return self::$_object->insert($table, $data);
+			return self::$_object->insert($table, $data, $update_on_duplicate);
 		}
 
 		static public function remove($table, array $query)
@@ -103,11 +103,11 @@
 			return self::$_object->remove($table, $query);
 		}
 
-		static public function update($table, $where, array $data, $create_if_missing = false)
+		static public function update($table, $where, array $data)
 		{
 			if (!self::$_object) {
 				throw new StorageException('Not yet initialised!');
 			}
-			return self::$_object->update($table, $where, $data, $create_if_missing);
+			return self::$_object->update($table, $where, $data);
 		}
 	}

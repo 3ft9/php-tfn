@@ -153,10 +153,14 @@
 			}
 		}
 
-		public function insert($table, array $data)
+		public function insert($table, array $data, $update_on_duplicate = false)
 		{
 			try {
-				$sql = 'insert into `'.$table.'` set '.$this->_buildWhere($data, ',');
+				$set = $this->_buildWhere($data, ',');
+				$sql = 'insert into `'.$table.'` set '.$set;
+				if ($update_on_duplicate) {
+					$sql .= ' on duplicate key update '.$set;
+				}
 				$this->_conn->query($sql);
 				return $this->_conn->lastInsertId();
 			} catch (\PDOException $e) {
@@ -174,7 +178,7 @@
 			}
 		}
 
-		public function update($table, $where, array $data, $create_if_missing = false)
+		public function update($table, $where, array $data)
 		{
 			$retval = false;
 
