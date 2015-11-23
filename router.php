@@ -81,7 +81,7 @@
 							$matched = true;
 							$url = substr($url, strlen($route[1]));
 							if ($url !== false) {
-								$params = $this->parseURL($url);
+								$params = self::parseURL($url);
 							}
 						}
 						break;
@@ -154,7 +154,7 @@
 		 * @param integer $skip The number of items to drop from the start
 		 * @return array
 		 */
-		public function parseURL($url = false, $skip = 0)
+		public static function parseURL($url = false, $skip = 0)
 		{
 			if ($url === false) {
 				$url = $_SERVER['REQUEST_URI'];
