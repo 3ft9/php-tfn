@@ -1,0 +1,16 @@
+{
+    "name": "3ft9/tfn",
+    "description": "3ft9's PHP library.",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Stuart Dallas",
+            "email": "stuart@3ft9.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TFN\\": "src"
+        }
+    }
+}
