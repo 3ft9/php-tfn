@@ -1,4 +1,6 @@
 <?php
+	namespace TFN;
+
 	class Dict
 	{
 		// Variable access function
