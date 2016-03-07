@@ -47,6 +47,45 @@
 		}
 
 		/**
+		 * Begin a transaction. This will throw an exception if the underlying
+		 * database doesn't support transactions.
+		 */
+		public function beginTransaction()
+		{
+			try {
+				$this->_conn->beginTransaction();
+			} catch (\PDOException $e) {
+				throw new StorageException('Failed to start transaction: '.$e->getMessage());
+			}
+		}
+
+		/**
+		 * Commit a transaction. This will throw an exception if the underlying
+		 * database doesn't support transactions.
+		 */
+		public function commitTransaction()
+		{
+			try {
+				$this->_conn->commit();
+			} catch (\PDOException $e) {
+				throw new StorageException('Failed to start transaction: '.$e->getMessage());
+			}
+		}
+
+		/**
+		 * Rollback transaction. This will throw an exception if the underlying
+		 * database doesn't support transactions.
+		 */
+		public function rollbackTransaction()
+		{
+			try {
+				$this->_conn->rollback();
+			} catch (\PDOException $e) {
+				throw new StorageException('Failed to start transaction: '.$e->getMessage());
+			}
+		}
+
+		/**
 		 * Escape the supplied value for use in a SQL query. This method should
 		 * add quotes as required.
 		 *

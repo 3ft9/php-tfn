@@ -7,6 +7,9 @@
 	interface ImplementationInterface
 	{
 		public function __construct(array $config);
+		public function beginTransaction();
+		public function commitTransaction();
+		public function rollbackTransaction();
 		public function escape($val, $add_quotes = true);
 		public function exists($table, array $query);
 		public function count($table, array $query = array());

@@ -33,6 +33,30 @@
 			self::$_object = new $class($config);
 		}
 
+		static public function beginTransaction()
+		{
+			if (!self::$_object) {
+				throw new StorageException('Not yet initialised!');
+			}
+			return self::$_object->beginTransaction();
+		}
+
+		static public function commitTransaction()
+		{
+			if (!self::$_object) {
+				throw new StorageException('Not yet initialised!');
+			}
+			return self::$_object->commitTransaction();
+		}
+
+		static public function rollbackTransaction()
+		{
+			if (!self::$_object) {
+				throw new StorageException('Not yet initialised!');
+			}
+			return self::$_object->rollbackTransaction();
+		}
+
 		static public function escape($val, $add_quotes = true)
 		{
 			if (!self::$_object) {
