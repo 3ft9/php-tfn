@@ -29,21 +29,42 @@
 		}
 
 		/**
-		 * Return an error.
+		 * Return a successful response in JSON.
+		 *
+		 * @param string $status  The status of the response.
+		 * @param mixed  $data    The data to send with the response, usually an array.
+		 * @param array  $headers Array of headers to send with the response.
+		 */
+		public function sendResponse($status = '204 No Content', $data = '', $headers = array())
+		{
+			$body = array(
+				'success' => true,
+			);
+			if ($data) {
+				$body['data'] = $data;
+			}
+			header('Content-Type: application/json');
+			parent::sendResponse($status, json_encode($body), $headers);
+		}
+
+		/**
+		 * Return an error response in JSON.
 		 *
 		 * @param string $status  The status of the response.
 		 * @param string $message The message describing the error.
 		 * @param array  $data    Any additional data related to the error.
 		 */
-		public function returnError($status, $message = false, $data = array())
+		public function sendError($status, $message = false, $data = array())
 		{
 			$body = '';
 			if ($message !== false) {
 				$body = json_encode(array(
 						'success' => false,
-						'message' => $message,
-						'data' => $data,
+						'error' => $message,
 					));
+				if ($data) {
+					$body['data'] = $data;
+				}
 			}
 			$this->sendResponse($status, $body);
 		}

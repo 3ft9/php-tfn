@@ -86,7 +86,7 @@
 		public function sendResponse($status = '204 No Content', $body = '', $headers = array())
 		{
 			if (!headers_sent()) {
-				header('HTTP/1.0 '.$status);
+				header('HTTP/1.1 '.$status);
 				header('Status: '.$status);
 				foreach ($headers as $key => $val) {
 					header($key.': '.$val);
