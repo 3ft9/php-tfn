@@ -31,7 +31,7 @@
 		{
 			// Validate that the configuration contains everything we need.
 			if (empty($config['dsn'])) {
-				throw new StorageException('Missing required configuration details');
+				throw new \TFN\Storage\Exception('Missing required configuration details');
 			}
 
 			// Save the configuration for a rainy day.
@@ -42,7 +42,7 @@
 				$this->_conn = new \PDO($config['dsn'], Dict::get($config, 'username', ''), Dict::get($config, 'password'));
 				$this->_conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 			} catch (\PDOException $e) {
-				throw new StorageException('Failed to connect: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Failed to connect: '.$e->getMessage());
 			}
 		}
 
@@ -55,7 +55,7 @@
 			try {
 				$this->_conn->beginTransaction();
 			} catch (\PDOException $e) {
-				throw new StorageException('Failed to start transaction: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Failed to start transaction: '.$e->getMessage());
 			}
 		}
 
@@ -68,7 +68,7 @@
 			try {
 				$this->_conn->commit();
 			} catch (\PDOException $e) {
-				throw new StorageException('Failed to start transaction: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Failed to start transaction: '.$e->getMessage());
 			}
 		}
 
@@ -81,7 +81,7 @@
 			try {
 				$this->_conn->rollback();
 			} catch (\PDOException $e) {
-				throw new StorageException('Failed to start transaction: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Failed to start transaction: '.$e->getMessage());
 			}
 		}
 
@@ -124,7 +124,7 @@
 			try {
 				return intval($this->_conn->query('select count(1) from `'.$table.'`'.($query ? ' where '.$this->_buildWhere($query, 'and') : ''), \PDO::FETCH_COLUMN, 0)->fetch());
 			} catch (\PDOException $e) {
-				throw new StorageException('Failed to connect: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Failed to connect: '.$e->getMessage());
 			}
 		}
 
@@ -172,7 +172,7 @@
 				}
 				return $this->querySQL($sql);
 			} catch (\PDOException $e) {
-				throw new StorageException('Query failed: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Query failed: '.$e->getMessage());
 			}
 		}
 
@@ -181,7 +181,7 @@
 			try {
 				return $this->_conn->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
 			} catch (\PDOException $e) {
-				throw new StorageException('Query failed: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Query failed: '.$e->getMessage());
 			}
 		}
 
@@ -190,7 +190,7 @@
 			try {
 				return $this->_conn->exec($sql);
 			} catch (\PDOException $e) {
-				throw new StorageException('Query failed: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Query failed: '.$e->getMessage());
 			}
 		}
 
@@ -205,7 +205,7 @@
 				$this->_conn->query($sql);
 				return $this->_conn->lastInsertId();
 			} catch (\PDOException $e) {
-				throw new StorageException('Query failed: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Query failed: '.$e->getMessage());
 			}
 		}
 
@@ -215,7 +215,7 @@
 				$sql = 'delete from `'.$table.'` where '.$this->_buildWhere($query, 'and');
 				return $this->_conn->query($sql)->rowCount();
 			} catch (\PDOException $e) {
-				throw new StorageException('Query failed: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Query failed: '.$e->getMessage());
 			}
 		}
 
@@ -227,7 +227,7 @@
 				$sql = 'update `'.$table.'` set '.$this->_buildWhere($data, ',').' where '.$this->_buildWhere($where, 'and');
 				return $this->_conn->query($sql)->rowCount();
 			} catch (\PDOException $e) {
-				throw new StorageException('Query failed: '.$e->getMessage());
+				throw new \TFN\Storage\Exception('Query failed: '.$e->getMessage());
 			}
 		}
 

@@ -142,7 +142,7 @@
 				$additional_data['password'] = self::seasonPassword($password);
 				// Create the user in the storage system.
 				return Storage::insert(self::STORAGE_TABLE, $additional_data);
-			} catch (StorageException $e) {
+			} catch (Storage\Exception $e) {
 				throw new UserException($e->getMessage());
 			}
 		}
@@ -201,7 +201,7 @@
 				}
 				$this->_data = $data;
 				$this->_dirty = false;
-			} catch (StorageException $e) {
+			} catch (Storage\Exception $e) {
 				throw new UserException('Failed to get user: '.$e->getMessage());
 			}
 		}
@@ -309,7 +309,7 @@
 				if (!$data) {
 					throw new UserNotFoundException();
 				}
-			} catch (StorageException $e) {
+			} catch (Storage\Exception $e) {
 				throw new UserNotFoundException();
 			}
 
@@ -428,7 +428,7 @@
 				Storage::update(self::STORAGE_TABLE, array('id' => $this->id), $this->processUpdateData($data));
 				$this->reloadData();
 				return true;
-			} catch (StorageException $e) {
+			} catch (Storage\Exception $e) {
 				switch ($e->getCode()) {
 					default:
 						throw new UserException($e->getMessage());
@@ -496,9 +496,9 @@
 				// Clear the internal data.
 				$this->_data = array();
 				return true;
-			} catch (StorageException $e) {
+			} catch (Storage\Exception $e) {
 				switch ($e->getCode()) {
-					case StorageException::NOT_FOUND:
+					case Storage\Exception::NOT_FOUND:
 						throw new UserNotFoundException();
 
 					default:

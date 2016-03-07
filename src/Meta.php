@@ -45,7 +45,7 @@
 					return $retval['val'];
 				}
 				// Not found, fall through to returning the default.
-			} catch (StorageException $e) {
+			} catch (Storage\Exception $e) {
 				// Not found, fall through to returning the default.
 			}
 			return $default;
@@ -71,7 +71,7 @@
 
 			try {
 				Storage::insert(self::TABLE, array('var' => $var, 'val' => $val), true);
-			} catch (StorageException $e) {
+			} catch (Storage\Exception $e) {
 				throw new MetaException($e->getMessage());
 			}
 		}
@@ -86,7 +86,7 @@
 		{
 			try {
 				Storage::remove(self::TABLE, array('var' => $var));
-			} catch (StorageException $e) {
+			} catch (Storage\Exception $e) {
 				throw new MetaException($e->getMessage());
 			}
 		}
