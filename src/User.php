@@ -95,6 +95,19 @@
 			return new self($id);
 		}
 
+		public static function getByUsername($username)
+		{
+			try {
+				$id = Storage::get(self::STORAGE_TABLE, array('username' => $username), array('id'));
+				if ($id) {
+					return self::get($id['id']);
+				}
+				throw new UserNotFoundException();
+			} catch (Storage\Exception $e) {
+				throw new UserException($e);
+			}
+		}
+
 		public static function getAll()
 		{
 			$rows = Storage::query(self::STORAGE_TABLE, array(), array('id'), array('username' => 'asc'));
@@ -254,16 +267,18 @@
 		 *                                months instead of the default (session).
 		 * @return User                   The logged in user object.
 		 */
-		public function logMeIn($authenticated = true, $rememberme = false)
+		public function logMeIn($authenticated = true, $rememberme = false, $nocookies = false)
 		{
 			self::$_loggedin = $this;
 
-			Cookie::set(
-				self::UserCookieName,
-				base64_encode($this->id),
-				($rememberme ? Cookie::SixMonths : Cookie::Session));
-
-			$this->createLoginToken();
+			if (!$nocookies) {
+				Cookie::set(
+					self::UserCookieName,
+					base64_encode($this->id),
+					($rememberme ? Cookie::SixMonths : Cookie::Session));
+			
+				$this->createLoginToken();
+			}
 
 			$this->_authenticated = $authenticated;
 
