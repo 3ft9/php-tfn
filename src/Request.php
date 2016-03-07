@@ -76,7 +76,7 @@
 		 */
 		public function getVar($key, $default = null)
 		{
-			return V($_GET, $key, $default);
+			return Dict::get($_GET, $key, $default);
 		}
 
 		/**
@@ -109,7 +109,7 @@
 		 */
 		public function postVar($key, $default = null)
 		{
-			return V($_POST, $key, $default);
+			return Dict::get($_POST, $key, $default);
 		}
 
 		/**
@@ -132,7 +132,7 @@
 		 */
 		public function serverVar($key, $default = null)
 		{
-			return V($_SERVER, $key, $default);
+			return Dict::get($_SERVER, $key, $default);
 		}
 
 		/**
