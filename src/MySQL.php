@@ -1,6 +1,11 @@
 <?php
 	/**
 	 * TFN: 3ft9 Ltd PHP Component Library.
+	 * 
+	 * DEPRECATED: Use the Storage class instead.
+	 * This class uses the mysql_* PHP functions which
+	 * have now been deprecated in PHP and might get
+	 * removed at any time.
 	 */
 	namespace TFN;
 
